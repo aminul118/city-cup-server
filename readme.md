@@ -52,4 +52,24 @@ const juiceCollections = client.db("juiceDB").collection("juice");
       res.send(result);
     });
 ```
+
 ### UPDATE Method
+
+```
+ app.put("/juices/:id", async (req, res) => {
+      const id = req.params.id;
+      // Set the upsert option to insert a document if no documents match
+      const query = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updatedJuice = req.body;
+      const juice = {
+        $set: {
+          name: updatedJuice.name,
+          category: updatedJuice.category,
+          photo: updatedJuice.photo,
+        },
+      };
+      const result = await juiceCollections.updateOne(query, juice, options);
+      res.send(result);
+    });
+```

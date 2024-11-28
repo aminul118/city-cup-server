@@ -54,6 +54,24 @@ async function run() {
       res.send(result);
     });
 
+    // Update a specific one
+    app.put("/juices/:id", async (req, res) => {
+      const id = req.params.id;
+      // Set the upsert option to insert a document if no documents match
+      const query = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updatedJuice = req.body;
+      const juice = {
+        $set: {
+          name: updatedJuice.name,
+          category: updatedJuice.category,
+          photo: updatedJuice.photo,
+        },
+      };
+      const result = await juiceCollections.updateOne(query, juice, options);
+      res.send(result);
+    });
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
